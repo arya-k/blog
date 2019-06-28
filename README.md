@@ -11,3 +11,9 @@ This will hopefully be the repository of my personal blog/website. This serves a
  * No foreign dependencies
  * No fancy animations
  * Clear focus on the content
+
+## Project Structure
+ * `posts`: blog posts, in the form of markdown files.
+ * `assets`: Css, fonts, and other assets for the site.
+ * `src`: Static site builder, programmed in Rust
+ * `compiled`: The fully compiled website, hosted on Netlify
