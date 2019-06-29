@@ -1,5 +1,5 @@
 # bc19 post-mortem: _plzgoeasy_
-<time>February 2nd, 2019</time>
+<time>Feb 2, 2019</time>
 
 This year I did BattleCode with Alan Zheng and Ajith Kemisetti, two of my classmates at Thomas Jefferson HS for Science and Technology. Our bot, _plzgoeasy_, was moderately successful, placing 7th in the seeding tournament. So, in keeping with a [long tradition](http://www.anatid.net/2014/12/battlecode-links.html) of post-mortems, here are my thoughts on BattleCode 2019.
 
