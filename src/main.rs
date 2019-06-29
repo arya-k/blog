@@ -2,12 +2,20 @@ use std::fs;
 use comrak::{markdown_to_html, ComrakOptions};
 
 static REPO_ROOT: &'static str = "/Users/arya/Documents/blog";
+static BASE_URL: &'static str = "https://arya-k.netlify.com";
 
 fn main() {
     // First, remove the compiled assets
     println!("Removing compiled assets...");
-    fs::remove_dir_all(format!("{}/compiled", REPO_ROOT)).expect("Failed to delete compiled directory");
-    fs::create_dir(format!("{}/compiled", REPO_ROOT)).expect("Failed to create compiled directory");
+    let dir = fs::read_dir(format!("{}/compiled", REPO_ROOT)).unwrap();
+    for entry in dir {
+        if let Ok(entry) = entry {
+            let path = entry.path();
+            if ! path.is_dir() && path.extension().unwrap() == "html" {
+                fs::remove_file(path).expect("Failed to remove a file");
+            }
+        }
+    }
 
     // Add support for all github extensions on Markdown
     let comrak_options = ComrakOptions {
@@ -21,7 +29,9 @@ fn main() {
     };
 
     // Gather the head and tail strings:
-    let header = fs::read_to_string(format!("{}/assets/head.html", REPO_ROOT)).expect("Unable to read header");
+    let header = fs::read_to_string(format!("{}/compiled/assets/head.html", REPO_ROOT))
+                    .expect("Unable to read header")
+                    .replace("{{ BASE_URL }}", BASE_URL);
     let footer = "</body>\n</html>";
 
     // Start parsing through all the posts:
@@ -50,8 +60,6 @@ fn main() {
             println!("Skipping {:?} - Missing date", safe_post.file_name());
             continue;
         }
-
-        // TODO: CREATE AND ORDER HOMEPAGE
 
         let html = markdown_to_html(&md, &comrak_options);
         let fullhtml = format!("{}{}{}", header.replace("{{ TITLE }}", title), html, footer);
