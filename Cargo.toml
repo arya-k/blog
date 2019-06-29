@@ -5,3 +5,5 @@ authors = ["Arya Kumar <arkumar@umich.edu>"]
 edition = "2018"
 
 [dependencies]
+comrak = "0.6"
+
