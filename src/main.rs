@@ -5,7 +5,7 @@ use chrono::prelude::*;
 use comrak::{markdown_to_html, ComrakOptions};
 
 static REPO_ROOT: &'static str = "/Users/arya/Documents/blog";
-static BASE_URL: &'static str = "https://arya-k.netlify.com";
+static BASE_URL: &'static str = "https://www.arya-k.dev";
 
 #[derive(Debug)]
 struct Post {
