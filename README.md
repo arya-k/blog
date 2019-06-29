@@ -18,5 +18,3 @@ This will hopefully be the repository of my personal blog/website. This serves a
  * `compiled`: The fully compiled website, hosted on Netlify
  * `compiled/assets`: Css, fonts, and other assets for the site.
 
-## TODO
- - [ ] homepage!
