@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+<header id="header">
+<a class="blogname" href="https://www.arya-k.dev">arya-k</a>
+</header>
+<title>Creating a Hyper key on macOS</title>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<link id='stylesheet' rel='stylesheet' href='assets/style.css'>
+<link href="assets/syntaxhighlight/prism.css" rel="stylesheet" />
+<!-- Icons generated with https://realfavicongenerator.net -->
+<link rel="apple-touch-icon" sizes="180x180" href="assets/imgs/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/imgs/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/imgs/favicon-16x16.png">
+<link rel="manifest" href="assets/imgs/site.webmanifest">
+<link rel="mask-icon" href="assets/imgs/safari-pinned-tab.svg" color="#133259">
+<link rel="shortcut icon" href="assets/imgs/favicon.ico">
+<meta name="msapplication-TileColor" content="#133259">
+<meta name="msapplication-config" content="assets/imgs/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+<script src="assets/syntaxhighlight/prism.js"></script>
+<h1>Creating a Hyper key on macOS</h1>
+<time>Jul 6, 2019</time>
+<p>Take a look at the home row on your keyboard. There's one key on there that's pretty useless. It's functionality duplicated by another, more useful one. Can you spot it?</p>
+<p>Hidden to the left of your left pinkie lies the <kbd>Caps Lock</kbd> key. It currently doesn't do much, but it has the potential to supercharge how you use your computer.</p>
+<p>Using two applications, <a href="https://www.hammerspoon.org">Hammerspoon</a> and <a href="https://github.com/tekezo/Karabiner-Elements">Karabiner-Elements</a>, you can turn the ordinary key into a <kbd>Hyper</kbd> key, which you can use to control your mac in a number of ways.</p>
+<h3>What's a hyper key?</h3>
+<p>The Hyper key isn't a new concept. I first learnt about it from Steve Josh's <a href="http://stevelosh.com/blog/2012/10/a-modern-space-cadet/">excellent</a> blog. People have come and adapted his instructions, first revising it for the <a href="https://brettterpstra.com/2012/12/08/a-useful-caps-lock-key/">OSX</a>, and later for <a href="https://brettterpstra.com/2017/06/15/a-hyper-key-with-karabiner-elements-full-instructions/">macOS</a>.</p>
+<p>In essence, a hyper key does two things:</p>
+<ol>
+<li>If you press it on its own, it acts as an escape key. For programmers with touchbars, this is feature enough. It's much easier to use when working in modal editors, like <a href="https://www.vim.org">vim</a>.</li>
+<li>If you press it in combination with other keys, you can make it do <em>whatever you want!</em></li>
+</ol>
+<p>This can be incredibly powerful. By creating a hyper key, you can define custom shortcuts that do everything from window management to running scripts. And the latter opens the door for controlling every aspect of your mac.</p>
+<h3>How does it work?</h3>
+<p>To rebind the key itself, we use Karabiner Elements to customize our <kbd>Caps Lock</kbd> key. When pressed on it's own, it acts as an <kbd>esc</kbd>.</p>
+<p>If pressed in combination with other keys, it acts as a <kbd>Command</kbd> + <kbd>Control</kbd> + <kbd>Option</kbd> + <kbd>Shift</kbd>.</p>
+<p>Since pressing all those keys at once is a little silly, the engineers at Apple decided that no keyboard shortcuts would use all of them at once. So that means that any shortcuts you create with the hyper key won't be bound to anything else.</p>
+<p>To make these shortcuts actually do things, we use Hammerspoon. According to it's website:</p>
+<blockquote>
+<p>[Hammerspoon] is a tool for powerful automation of OS X. At its core, it is just a bridge between the operating system and a Lua scripting engine.</p>
+</blockquote>
+<p>What this means is we can bind our custom key combinations to hammerspoon, and have it run any number of actions. And all of this configuration can be done in lua.</p>
+<h3>Installation</h3>
+<h4>Homebrew</h4>
+<p>To setup your own hyperkey, start by installing homebrew from the <a href="https://brew.sh">website</a>. Homebrew is a package manager for macOS that makes it much easier to install packages on your system.</p>
+<p>Once installed, begin by running</p>
+<pre><code class="language-bash">brew cask install hammerspoon karabiner-elements
+</code></pre>
+<p>Homebrew will set about downloading both applications, and then moving them into your <code>Applications</code> folder.</p>
+<h4>Karabiner Elements</h4>
+<p>Next, open up Karabiner Elements, and allow it to add itself to Login Items so that it starts up every time you log into your mac.</p>
+<p>Open up <code>~/.config/karabiner/karabiner.json</code> with your text editor of choice. Replace the <code>complex modifications</code> json with the following:</p>
+<pre><code class="language-python">&quot;complex_modifications&quot;: {
+    &quot;parameters&quot;: {
+        &quot;basic.simultaneous_threshold_milliseconds&quot;: 50,
+        &quot;basic.to_delayed_action_delay_milliseconds&quot;: 500,
+        &quot;basic.to_if_alone_timeout_milliseconds&quot;: 1000,
+        &quot;basic.to_if_held_down_threshold_milliseconds&quot;: 500,
+        &quot;mouse_motion_to_scroll.speed&quot;: 100
+    },
+    &quot;rules&quot;: [
+        {
+            &quot;description&quot;: &quot;CapsLock to Hyper/Escape&quot;,
+            &quot;manipulators&quot;: [
+                {
+                    &quot;from&quot;: {
+                        &quot;key_code&quot;: &quot;caps_lock&quot;,
+                        &quot;modifiers&quot;: {
+                            &quot;optional&quot;: [
+                                &quot;any&quot;
+                            ]
+                        }
+                    },
+                    &quot;to&quot;: [
+                        {
+                            &quot;key_code&quot;: &quot;right_shift&quot;,
+                            &quot;modifiers&quot;: [
+                                &quot;right_command&quot;,
+                                &quot;right_control&quot;,
+                                &quot;right_option&quot;
+                            ]
+                        }
+                    ],
+                    &quot;to_if_alone&quot;: [
+                        {
+                            &quot;key_code&quot;: &quot;escape&quot;
+                        }
+                    ],
+                    &quot;type&quot;: &quot;basic&quot;
+                }
+            ]
+        }
+    ]
+},
+</code></pre>
+<p>Restart Karabiner Elements, and you should see the following under Complex Modifications:
+<img src="https://i.imgur.com/wqfowjW.png" alt="" /></p>
+<p>At this point, the key bindings should already be in place. Give them a try by opening up a Terminal, and typing in <code>vim</code>.</p>
+<p>From there, you should be able to hit the <kbr>Caps Lock</kbr> key to escape, and then type <code>:q</code> to quit.</p>
+<p>Congratulations! You're now ahead of <a href="https://stackoverflow.blog/2017/05/23/stack-overflow-helping-one-million-developers-exit-vim/">a million stack-overflowing developers</a></p>
+<h4>Hammerspoon</h4>
+<p>Now to make the shortcuts actually do something! First off, open up Hammerspoon's settings. By default, it shows up in the dock and the menubar. I prefer a more invisible setup, so I use these settings:
+<img src="https://i.imgur.com/gRii6lg.png" alt="" /></p>
+<p>Next, open up Hammerspoon's config file, <code>~/.hammerspoon/init.lua</code>, in your editor of choice.</p>
+<p>Begin the file by defining your constants:</p>
+<pre><code class="language-python">-- CONSTANTS:
+hyper = {&quot;cmd&quot;, &quot;alt&quot;, &quot;ctrl&quot;, &quot;shift&quot;}
+</code></pre>
+<p>Next, add live reloading. This'll let hammerspoon automatically update every time it detects a change in it's configuration file:</p>
+<pre><code class="language-python">-- CONFIG RELOADING:
+hs.alert.show(&quot;Config Loaded&quot;)
+hs.loadSpoon(&quot;ReloadConfiguration&quot;)
+spoon.ReloadConfiguration:start()
+</code></pre>
+<p>From here, you can choose to bind keys however you wish. I work with a fairly minimal configuration.</p>
+<p>First, I bind some letter keys to various applications:</p>
+<pre><code class="language-python">-- HYPER APPLICATION BINDINGS:
+application_bindings = {
+    [&quot;S&quot;] = &quot;Safari&quot;,
+    [&quot;D&quot;] = &quot;Sublime Text&quot;,
+    [&quot;C&quot;] = &quot;Calendar&quot;,
+    [&quot;T&quot;] = &quot;Terminal&quot;,
+    [&quot;B&quot;] = &quot;Bear&quot;,
+    [&quot;E&quot;] = &quot;Mail&quot;,
+    [&quot;M&quot;] = &quot;Messenger&quot;,
+    [&quot;I&quot;] = &quot;iTunes&quot;,
+    [&quot;R&quot;] = &quot;Transmission&quot;,
+    [&quot;P&quot;] = &quot;Pages&quot;,
+}
+
+for k,v in pairs(application_bindings) do
+    hs.hotkey.bind(hyper, k, function()
+        hs.application.launchOrFocus(v)
+    end)
+end
+</code></pre>
+<p>I also use hammerspoon for some basic window management, so I can quickly tile the active window to the left, right, or maximize. Those settings look like this:</p>
+<pre><code class="language-python">-- WINDOW MANIPULATION:
+hs.window.animationDuration = 0
+
+-- Center
+hs.hotkey.bind(hyper, &quot;return&quot;, function()
+    local win = hs.window.focusedWindow()
+    local f = win:frame()
+    local max = win:screen():frame()
+
+    f.x, f.y = max.x, max.y
+    f.w, f.h = max.w, max.h
+    win:setFrame(f)
+end)
+
+-- Left
+hs.hotkey.bind(hyper, &quot;H&quot;, function()
+    local win = hs.window.focusedWindow()
+    local f = win:frame()
+    local max = win:screen():frame()
+
+    f.x, f.y = max.x, max.y
+    f.w, f.h = max.w / 2, max.h
+    win:setFrame(f)
+end)
+
+-- Right
+hs.hotkey.bind(hyper, &quot;L&quot;, function()
+    local win = hs.window.focusedWindow()
+    local f = win:frame()
+    local max = win:screen():frame()
+
+    f.x, f.y = max.x + (max.w / 2), max.y
+    f.w, f.h = max.w / 2, max.h
+    win:setFrame(f)
+end)
+</code></pre>
+<h4>Conclusion</h4>
+<p>From here, you can go on to create whatever shortcuts you wish. Hammerspoon provides some <a href="https://www.hammerspoon.org/docs/">excellent documentation</a>, and you can also take a look at my full hyperkey config in <a href="https://github.com/arya-k/dotfiles/tree/master/hyperkey">my dotfiles</a>.</p>
+<p>The only limit now, is your imagination*!</p>
+<ul>
+<li>and your understanding of lua :)</li>
+</ul>
+</body>
+</html>
