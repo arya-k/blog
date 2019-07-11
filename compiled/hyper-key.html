@@ -8,7 +8,6 @@
 <title>Creating a Hyper key on macOS</title>
 <meta name='viewport' content='width=device-width, initial-scale=1.0'>
 <link id='stylesheet' rel='stylesheet' href='assets/style.css'>
-<link href="assets/syntaxhighlight/prism.css" rel="stylesheet" />
 <!-- Icons generated with https://realfavicongenerator.net -->
 <link rel="apple-touch-icon" sizes="180x180" href="assets/imgs/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/imgs/favicon-32x32.png">
@@ -22,7 +21,6 @@
 </head>
 
 <body>
-<script src="assets/syntaxhighlight/prism.js"></script>
 <h1>Creating a Hyper key on macOS</h1>
 <time>Jul 6, 2019</time>
 <p>Take a look at the home row on your keyboard. There's one key on there that's pretty useless. It's functionality duplicated by another, more useful one. Can you spot it?</p>
@@ -49,54 +47,56 @@
 <h4>Homebrew</h4>
 <p>To setup your own hyperkey, start by installing homebrew from the <a href="https://brew.sh">website</a>. Homebrew is a package manager for macOS that makes it much easier to install packages on your system.</p>
 <p>Once installed, begin by running</p>
-<pre><code class="language-bash">brew cask install hammerspoon karabiner-elements
+<pre><code class="language-bash"><span style="color:#8fa1b3;">brew</span><span style="color:#c0c5ce;"> cask install hammerspoon karabiner-elements
+</span>
 </code></pre>
 <p>Homebrew will set about downloading both applications, and then moving them into your <code>Applications</code> folder.</p>
 <h4>Karabiner Elements</h4>
 <p>Next, open up Karabiner Elements, and allow it to add itself to Login Items so that it starts up every time you log into your mac.</p>
 <p>Open up <code>~/.config/karabiner/karabiner.json</code> with your text editor of choice. Replace the <code>complex modifications</code> json with the following:</p>
-<pre><code class="language-python">&quot;complex_modifications&quot;: {
-    &quot;parameters&quot;: {
-        &quot;basic.simultaneous_threshold_milliseconds&quot;: 50,
-        &quot;basic.to_delayed_action_delay_milliseconds&quot;: 500,
-        &quot;basic.to_if_alone_timeout_milliseconds&quot;: 1000,
-        &quot;basic.to_if_held_down_threshold_milliseconds&quot;: 500,
-        &quot;mouse_motion_to_scroll.speed&quot;: 100
-    },
-    &quot;rules&quot;: [
-        {
-            &quot;description&quot;: &quot;CapsLock to Hyper/Escape&quot;,
-            &quot;manipulators&quot;: [
-                {
-                    &quot;from&quot;: {
-                        &quot;key_code&quot;: &quot;caps_lock&quot;,
-                        &quot;modifiers&quot;: {
-                            &quot;optional&quot;: [
-                                &quot;any&quot;
-                            ]
-                        }
-                    },
-                    &quot;to&quot;: [
-                        {
-                            &quot;key_code&quot;: &quot;right_shift&quot;,
-                            &quot;modifiers&quot;: [
-                                &quot;right_command&quot;,
-                                &quot;right_control&quot;,
-                                &quot;right_option&quot;
-                            ]
-                        }
-                    ],
-                    &quot;to_if_alone&quot;: [
-                        {
-                            &quot;key_code&quot;: &quot;escape&quot;
-                        }
-                    ],
-                    &quot;type&quot;: &quot;basic&quot;
-                }
-            ]
-        }
-    ]
-},
+<pre><code class="language-python"><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">complex_modifications</span><span style="color:#c0c5ce;">&quot;: {
+</span><span style="color:#c0c5ce;">    &quot;</span><span style="color:#a3be8c;">parameters</span><span style="color:#c0c5ce;">&quot;: {
+</span><span style="color:#c0c5ce;">        &quot;</span><span style="color:#a3be8c;">basic.simultaneous_threshold_milliseconds</span><span style="color:#c0c5ce;">&quot;: </span><span style="color:#d08770;">50</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">        &quot;</span><span style="color:#a3be8c;">basic.to_delayed_action_delay_milliseconds</span><span style="color:#c0c5ce;">&quot;: </span><span style="color:#d08770;">500</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">        &quot;</span><span style="color:#a3be8c;">basic.to_if_alone_timeout_milliseconds</span><span style="color:#c0c5ce;">&quot;: </span><span style="color:#d08770;">1000</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">        &quot;</span><span style="color:#a3be8c;">basic.to_if_held_down_threshold_milliseconds</span><span style="color:#c0c5ce;">&quot;: </span><span style="color:#d08770;">500</span><span style="color:#c0c5ce;">,
+</span><span style="color:#c0c5ce;">        &quot;</span><span style="color:#a3be8c;">mouse_motion_to_scroll.speed</span><span style="color:#c0c5ce;">&quot;: </span><span style="color:#d08770;">100
+</span><span style="color:#c0c5ce;">    },
+</span><span style="color:#c0c5ce;">    &quot;</span><span style="color:#a3be8c;">rules</span><span style="color:#c0c5ce;">&quot;: [
+</span><span style="color:#c0c5ce;">        {
+</span><span style="color:#c0c5ce;">            &quot;</span><span style="color:#a3be8c;">description</span><span style="color:#c0c5ce;">&quot;: &quot;</span><span style="color:#a3be8c;">CapsLock to Hyper/Escape</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">            &quot;</span><span style="color:#a3be8c;">manipulators</span><span style="color:#c0c5ce;">&quot;: [
+</span><span style="color:#c0c5ce;">                {
+</span><span style="color:#c0c5ce;">                    &quot;</span><span style="color:#a3be8c;">from</span><span style="color:#c0c5ce;">&quot;: {
+</span><span style="color:#c0c5ce;">                        &quot;</span><span style="color:#a3be8c;">key_code</span><span style="color:#c0c5ce;">&quot;: &quot;</span><span style="color:#a3be8c;">caps_lock</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">                        &quot;</span><span style="color:#a3be8c;">modifiers</span><span style="color:#c0c5ce;">&quot;: {
+</span><span style="color:#c0c5ce;">                            &quot;</span><span style="color:#a3be8c;">optional</span><span style="color:#c0c5ce;">&quot;: [
+</span><span style="color:#c0c5ce;">                                &quot;</span><span style="color:#a3be8c;">any</span><span style="color:#c0c5ce;">&quot;
+</span><span style="color:#c0c5ce;">                            ]
+</span><span style="color:#c0c5ce;">                        }
+</span><span style="color:#c0c5ce;">                    },
+</span><span style="color:#c0c5ce;">                    &quot;</span><span style="color:#a3be8c;">to</span><span style="color:#c0c5ce;">&quot;: [
+</span><span style="color:#c0c5ce;">                        {
+</span><span style="color:#c0c5ce;">                            &quot;</span><span style="color:#a3be8c;">key_code</span><span style="color:#c0c5ce;">&quot;: &quot;</span><span style="color:#a3be8c;">right_shift</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">                            &quot;</span><span style="color:#a3be8c;">modifiers</span><span style="color:#c0c5ce;">&quot;: [
+</span><span style="color:#c0c5ce;">                                &quot;</span><span style="color:#a3be8c;">right_command</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">                                &quot;</span><span style="color:#a3be8c;">right_control</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">                                &quot;</span><span style="color:#a3be8c;">right_option</span><span style="color:#c0c5ce;">&quot;
+</span><span style="color:#c0c5ce;">                            ]
+</span><span style="color:#c0c5ce;">                        }
+</span><span style="color:#c0c5ce;">                    ],
+</span><span style="color:#c0c5ce;">                    &quot;</span><span style="color:#a3be8c;">to_if_alone</span><span style="color:#c0c5ce;">&quot;: [
+</span><span style="color:#c0c5ce;">                        {
+</span><span style="color:#c0c5ce;">                            &quot;</span><span style="color:#a3be8c;">key_code</span><span style="color:#c0c5ce;">&quot;: &quot;</span><span style="color:#a3be8c;">escape</span><span style="color:#c0c5ce;">&quot;
+</span><span style="color:#c0c5ce;">                        }
+</span><span style="color:#c0c5ce;">                    ],
+</span><span style="color:#c0c5ce;">                    &quot;</span><span style="color:#a3be8c;">type</span><span style="color:#c0c5ce;">&quot;: &quot;</span><span style="color:#a3be8c;">basic</span><span style="color:#c0c5ce;">&quot;
+</span><span style="color:#c0c5ce;">                }
+</span><span style="color:#c0c5ce;">            ]
+</span><span style="color:#c0c5ce;">        }
+</span><span style="color:#c0c5ce;">    ]
+</span><span style="color:#c0c5ce;">},
+</span>
 </code></pre>
 <p>Restart Karabiner Elements, and you should see the following under Complex Modifications:
 <img src="https://i.imgur.com/wqfowjW.png" alt="" /></p>
@@ -108,73 +108,77 @@
 <img src="https://i.imgur.com/gRii6lg.png" alt="" /></p>
 <p>Next, open up Hammerspoon's config file, <code>~/.hammerspoon/init.lua</code>, in your editor of choice.</p>
 <p>Begin the file by defining your constants:</p>
-<pre><code class="language-python">-- CONSTANTS:
-hyper = {&quot;cmd&quot;, &quot;alt&quot;, &quot;ctrl&quot;, &quot;shift&quot;}
+<pre><code class="language-python"><span style="color:#c0c5ce;">-- </span><span style="color:#bf616a;">CONSTANTS</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">hyper = {&quot;</span><span style="color:#a3be8c;">cmd</span><span style="color:#c0c5ce;">&quot;, &quot;</span><span style="color:#a3be8c;">alt</span><span style="color:#c0c5ce;">&quot;, &quot;</span><span style="color:#a3be8c;">ctrl</span><span style="color:#c0c5ce;">&quot;, &quot;</span><span style="color:#a3be8c;">shift</span><span style="color:#c0c5ce;">&quot;}
+</span>
 </code></pre>
 <p>Next, add live reloading. This'll let hammerspoon automatically update every time it detects a change in it's configuration file:</p>
-<pre><code class="language-python">-- CONFIG RELOADING:
-hs.alert.show(&quot;Config Loaded&quot;)
-hs.loadSpoon(&quot;ReloadConfiguration&quot;)
-spoon.ReloadConfiguration:start()
+<pre><code class="language-python"><span style="color:#c0c5ce;">-- </span><span style="color:#bf616a;">CONFIG RELOADING</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">hs.alert.</span><span style="color:#8fa1b3;">show</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">Config Loaded</span><span style="color:#c0c5ce;">&quot;)
+</span><span style="color:#c0c5ce;">hs.</span><span style="color:#8fa1b3;">loadSpoon</span><span style="color:#c0c5ce;">(&quot;</span><span style="color:#a3be8c;">ReloadConfiguration</span><span style="color:#c0c5ce;">&quot;)
+</span><span style="color:#c0c5ce;">spoon.ReloadConfiguration:</span><span style="color:#8fa1b3;">start</span><span style="color:#c0c5ce;">()
+</span>
 </code></pre>
 <p>From here, you can choose to bind keys however you wish. I work with a fairly minimal configuration.</p>
 <p>First, I bind some letter keys to various applications:</p>
-<pre><code class="language-python">-- HYPER APPLICATION BINDINGS:
-application_bindings = {
-    [&quot;S&quot;] = &quot;Safari&quot;,
-    [&quot;D&quot;] = &quot;Sublime Text&quot;,
-    [&quot;C&quot;] = &quot;Calendar&quot;,
-    [&quot;T&quot;] = &quot;Terminal&quot;,
-    [&quot;B&quot;] = &quot;Bear&quot;,
-    [&quot;E&quot;] = &quot;Mail&quot;,
-    [&quot;M&quot;] = &quot;Messenger&quot;,
-    [&quot;I&quot;] = &quot;iTunes&quot;,
-    [&quot;R&quot;] = &quot;Transmission&quot;,
-    [&quot;P&quot;] = &quot;Pages&quot;,
-}
-
-for k,v in pairs(application_bindings) do
-    hs.hotkey.bind(hyper, k, function()
-        hs.application.launchOrFocus(v)
-    end)
-end
+<pre><code class="language-python"><span style="color:#c0c5ce;">-- </span><span style="color:#bf616a;">HYPER APPLICATION BINDINGS</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">application_bindings = {
+</span><span style="color:#c0c5ce;">    [&quot;</span><span style="color:#a3be8c;">S</span><span style="color:#c0c5ce;">&quot;] = &quot;</span><span style="color:#a3be8c;">Safari</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">    [&quot;</span><span style="color:#a3be8c;">D</span><span style="color:#c0c5ce;">&quot;] = &quot;</span><span style="color:#a3be8c;">Sublime Text</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">    [&quot;</span><span style="color:#a3be8c;">C</span><span style="color:#c0c5ce;">&quot;] = &quot;</span><span style="color:#a3be8c;">Calendar</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">    [&quot;</span><span style="color:#a3be8c;">T</span><span style="color:#c0c5ce;">&quot;] = &quot;</span><span style="color:#a3be8c;">Terminal</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">    [&quot;</span><span style="color:#a3be8c;">B</span><span style="color:#c0c5ce;">&quot;] = &quot;</span><span style="color:#a3be8c;">Bear</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">    [&quot;</span><span style="color:#a3be8c;">E</span><span style="color:#c0c5ce;">&quot;] = &quot;</span><span style="color:#a3be8c;">Mail</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">    [&quot;</span><span style="color:#a3be8c;">M</span><span style="color:#c0c5ce;">&quot;] = &quot;</span><span style="color:#a3be8c;">Messenger</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">    [&quot;</span><span style="color:#a3be8c;">I</span><span style="color:#c0c5ce;">&quot;] = &quot;</span><span style="color:#a3be8c;">iTunes</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">    [&quot;</span><span style="color:#a3be8c;">R</span><span style="color:#c0c5ce;">&quot;] = &quot;</span><span style="color:#a3be8c;">Transmission</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">    [&quot;</span><span style="color:#a3be8c;">P</span><span style="color:#c0c5ce;">&quot;] = &quot;</span><span style="color:#a3be8c;">Pages</span><span style="color:#c0c5ce;">&quot;,
+</span><span style="color:#c0c5ce;">}
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#b48ead;">for </span><span style="color:#c0c5ce;">k,v </span><span style="color:#b48ead;">in </span><span style="color:#8fa1b3;">pairs</span><span style="color:#c0c5ce;">(application_bindings) do
+</span><span style="color:#c0c5ce;">    hs.hotkey.</span><span style="color:#8fa1b3;">bind</span><span style="color:#c0c5ce;">(hyper, k, </span><span style="color:#8fa1b3;">function</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">        hs.application.</span><span style="color:#8fa1b3;">launchOrFocus</span><span style="color:#c0c5ce;">(v)
+</span><span style="color:#c0c5ce;">    end)
+</span><span style="color:#c0c5ce;">end
+</span>
 </code></pre>
 <p>I also use hammerspoon for some basic window management, so I can quickly tile the active window to the left, right, or maximize. Those settings look like this:</p>
-<pre><code class="language-python">-- WINDOW MANIPULATION:
-hs.window.animationDuration = 0
-
--- Center
-hs.hotkey.bind(hyper, &quot;return&quot;, function()
-    local win = hs.window.focusedWindow()
-    local f = win:frame()
-    local max = win:screen():frame()
-
-    f.x, f.y = max.x, max.y
-    f.w, f.h = max.w, max.h
-    win:setFrame(f)
-end)
-
--- Left
-hs.hotkey.bind(hyper, &quot;H&quot;, function()
-    local win = hs.window.focusedWindow()
-    local f = win:frame()
-    local max = win:screen():frame()
-
-    f.x, f.y = max.x, max.y
-    f.w, f.h = max.w / 2, max.h
-    win:setFrame(f)
-end)
-
--- Right
-hs.hotkey.bind(hyper, &quot;L&quot;, function()
-    local win = hs.window.focusedWindow()
-    local f = win:frame()
-    local max = win:screen():frame()
-
-    f.x, f.y = max.x + (max.w / 2), max.y
-    f.w, f.h = max.w / 2, max.h
-    win:setFrame(f)
-end)
+<pre><code class="language-python"><span style="color:#c0c5ce;">-- </span><span style="color:#bf616a;">WINDOW MANIPULATION</span><span style="color:#c0c5ce;">:
+</span><span style="color:#c0c5ce;">hs.window.animationDuration = </span><span style="color:#d08770;">0
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">-- Center
+</span><span style="color:#c0c5ce;">hs.hotkey.</span><span style="color:#8fa1b3;">bind</span><span style="color:#c0c5ce;">(hyper, &quot;</span><span style="color:#a3be8c;">return</span><span style="color:#c0c5ce;">&quot;, </span><span style="color:#8fa1b3;">function</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    local </span><span style="color:#bf616a;">win </span><span style="color:#c0c5ce;">= hs.window.</span><span style="color:#8fa1b3;">focusedWindow</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    local f = win:</span><span style="color:#8fa1b3;">frame</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    local </span><span style="color:#bf616a;">max </span><span style="color:#c0c5ce;">= win:</span><span style="color:#8fa1b3;">screen</span><span style="color:#c0c5ce;">():</span><span style="color:#8fa1b3;">frame</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    f.x, f.y = </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.x, </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.y
+</span><span style="color:#c0c5ce;">    f.w, f.h = </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.w, </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.h
+</span><span style="color:#c0c5ce;">    win:</span><span style="color:#8fa1b3;">setFrame</span><span style="color:#c0c5ce;">(f)
+</span><span style="color:#c0c5ce;">end)
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">-- Left
+</span><span style="color:#c0c5ce;">hs.hotkey.</span><span style="color:#8fa1b3;">bind</span><span style="color:#c0c5ce;">(hyper, &quot;</span><span style="color:#a3be8c;">H</span><span style="color:#c0c5ce;">&quot;, </span><span style="color:#8fa1b3;">function</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    local </span><span style="color:#bf616a;">win </span><span style="color:#c0c5ce;">= hs.window.</span><span style="color:#8fa1b3;">focusedWindow</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    local f = win:</span><span style="color:#8fa1b3;">frame</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    local </span><span style="color:#bf616a;">max </span><span style="color:#c0c5ce;">= win:</span><span style="color:#8fa1b3;">screen</span><span style="color:#c0c5ce;">():</span><span style="color:#8fa1b3;">frame</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    f.x, f.y = </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.x, </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.y
+</span><span style="color:#c0c5ce;">    f.w, f.h = </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.w / </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">, </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.h
+</span><span style="color:#c0c5ce;">    win:</span><span style="color:#8fa1b3;">setFrame</span><span style="color:#c0c5ce;">(f)
+</span><span style="color:#c0c5ce;">end)
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">-- Right
+</span><span style="color:#c0c5ce;">hs.hotkey.</span><span style="color:#8fa1b3;">bind</span><span style="color:#c0c5ce;">(hyper, &quot;</span><span style="color:#a3be8c;">L</span><span style="color:#c0c5ce;">&quot;, </span><span style="color:#8fa1b3;">function</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    local </span><span style="color:#bf616a;">win </span><span style="color:#c0c5ce;">= hs.window.</span><span style="color:#8fa1b3;">focusedWindow</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    local f = win:</span><span style="color:#8fa1b3;">frame</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">    local </span><span style="color:#bf616a;">max </span><span style="color:#c0c5ce;">= win:</span><span style="color:#8fa1b3;">screen</span><span style="color:#c0c5ce;">():</span><span style="color:#8fa1b3;">frame</span><span style="color:#c0c5ce;">()
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#c0c5ce;">    f.x, f.y = </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.x + (</span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.w / </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">), </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.y
+</span><span style="color:#c0c5ce;">    f.w, f.h = </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.w / </span><span style="color:#d08770;">2</span><span style="color:#c0c5ce;">, </span><span style="color:#96b5b4;">max</span><span style="color:#c0c5ce;">.h
+</span><span style="color:#c0c5ce;">    win:</span><span style="color:#8fa1b3;">setFrame</span><span style="color:#c0c5ce;">(f)
+</span><span style="color:#c0c5ce;">end)
+</span>
 </code></pre>
 <h4>Conclusion</h4>
 <p>From here, you can go on to create whatever shortcuts you wish. Hammerspoon provides some <a href="https://www.hammerspoon.org/docs/">excellent documentation</a>, and you can also take a look at my full hyperkey config in <a href="https://github.com/arya-k/dotfiles/tree/master/hyperkey">my dotfiles</a>.</p>
