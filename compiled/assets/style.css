@@ -18,7 +18,7 @@ body {
   font-family: sans-serif;
   font-weight: 300;
   font-size: 1.2em;
-  line-height: 1.4;
+  line-height: 1.5;
 
   max-width: 800px;
   margin: 20px auto;
@@ -141,6 +141,28 @@ th {
 
 tbody tr:nth-child(even) {
   background-color: var(--background-alt);
+}
+
+code, pre {
+  /*font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;*/
+}
+
+/* Code blocks */
+pre {
+  padding: 1em;
+  margin: .5em 0;
+  overflow: auto;
+}
+
+:not(pre) > code, pre {
+  background: var(--background);
+}
+
+/* Inline code */
+:not(pre) > code {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
 }
 
 a.blogname {

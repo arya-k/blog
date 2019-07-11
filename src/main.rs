@@ -1,8 +1,12 @@
 use chrono::prelude::*;
-use comrak::{markdown_to_html, ComrakOptions};
+use comrak::nodes::NodeValue;
+use comrak::{format_html, markdown_to_html, parse_document, Arena, ComrakOptions};
 use std::ffi::OsString;
 use std::fs;
 use std::vec::Vec;
+use syntect::highlighting::ThemeSet;
+use syntect::html::highlighted_html_for_string;
+use syntect::parsing::SyntaxSet;
 
 static REPO_ROOT: &'static str = "/Users/arya/Documents/blog";
 static BASE_URL: &'static str = "https://www.arya-k.dev";
@@ -33,9 +37,7 @@ fn validate_post(md: &str, file_name: &std::ffi::OsString, goal_name: &str) -> O
         // if it doesn't have a title, ignore it.
         println!("Skipping {:?} - Missing title", file_name);
         return None;
-    }
-
-    if !md.contains('\n') {
+    } else if !md.contains('\n') {
         // if it can't have a rawdate, ignore it.
         println!("Skipping {:?} - Too short", file_name);
         return None;
@@ -51,13 +53,13 @@ fn validate_post(md: &str, file_name: &std::ffi::OsString, goal_name: &str) -> O
         return None;
     }
 
-    if Utc
-        .datetime_from_str(
-            &format!("{} 00:00:00", rawdate),
-            "<time>%b %e, %Y</time> %T",
-        )
-        .is_err()
-    {
+    let parsed_date = Utc.datetime_from_str(
+        &format!("{} 00:00:00", rawdate),
+        "<time>%b %e, %Y</time> %T",
+    );
+
+    if parsed_date.is_err() {
+        // if date is malformed, ignore it
         println!("Skipping {:?} - Malformed date", file_name);
         return None;
     }
@@ -67,14 +69,74 @@ fn validate_post(md: &str, file_name: &std::ffi::OsString, goal_name: &str) -> O
         name: title.to_string(),
         url: format!("{}/{}", BASE_URL, goal_name),
         datestring: rawdate.to_string(),
-        datecreated: Utc
-            .datetime_from_str(
-                &format!("{} 00:00:00", rawdate),
-                "<time>%b %e, %Y</time> %T",
-            )
-            .unwrap()
-            .timestamp(),
+        datecreated: parsed_date.unwrap().timestamp(),
     })
+}
+
+fn md_to_html(md: &str, comrak_options: &ComrakOptions) -> std::string::String {
+    let arena = Arena::new();
+    let root = parse_document(&arena, &md, &comrak_options);
+
+    let ps = SyntaxSet::load_defaults_newlines();
+    let ts = ThemeSet::load_defaults();
+
+    // parse code snippets outside of the parser to avoid escaping.
+    let mut code_snippets: Vec<std::string::String> = Vec::new();
+
+    // basic BFS
+    let mut nodes_to_parse = vec![root];
+    let mut node;
+    while nodes_to_parse.len() > 0 {
+        node = nodes_to_parse.pop().unwrap();
+        match &mut node.data.borrow_mut().value {
+            &mut NodeValue::CodeBlock(ref mut codenode) => {
+                let lang = std::str::from_utf8(&codenode.info).unwrap();
+                let syntax = ps.find_syntax_by_token(lang).unwrap();
+                let orig_body = std::mem::replace(
+                    // replace code snippets with {{ CODE: }}
+                    &mut codenode.literal,
+                    format!("{{ CODE:{} }}", code_snippets.len())
+                        .as_bytes()
+                        .to_vec(),
+                );
+
+                code_snippets.push(
+                    // Save the converted code snippet so we can add it back in
+                    highlighted_html_for_string(
+                        std::str::from_utf8(&orig_body).unwrap(),
+                        &ps,
+                        &syntax,
+                        &ts.themes["base16-ocean.dark"],
+                    ),
+                );
+            }
+            _ => (),
+        }
+        nodes_to_parse.extend(node.children());
+    }
+
+    let mut html = vec![];
+    format_html(root, comrak_options, &mut html).unwrap(); // generate main html
+
+    let mut html_string = std::str::from_utf8(&html)
+        .unwrap()
+        .to_string()
+        .replace("<p><time>", "<time>")
+        .replace("</time></p>", "</time>"); // time gets extra escaped
+
+    // Add the code snippets back in:
+    for (i, cs) in code_snippets.iter().enumerate() {
+        html_string = html_string.replace(
+            &format!("{{ CODE:{} }}", i),
+            &cs.lines()
+                .skip(1)
+                .map(|l| l.to_owned() + "\n")
+                .collect::<String>()
+                .replace("</span></pre>", "</span>"),
+        );
+    }
+
+    html_string // return final html string
 }
 
 fn write_index(post_structs: &mut Vec<Post>, header: &str, comrak_options: &ComrakOptions) {
@@ -143,14 +205,10 @@ fn main() {
 
         if let Some(p) = validate_post(&md, &safe_post.file_name(), &goal_name) {
             // convert to markdown + generate file:
-
-            // TODO: inject into this build process to customize syntax highlighting
             let html = format!(
                 "{}{}{}",
                 header.replace("{{ TITLE }}", &p.name),
-                markdown_to_html(&md, &comrak_options)
-                    .replace("<p><time>", "<time>")
-                    .replace("</time></p>", "</time>"),
+                md_to_html(&md, &comrak_options),
                 footer
             );
 
@@ -163,6 +221,7 @@ fn main() {
         }
     }
 
+    // create the index file using the posts
     write_index(&mut post_structs, &header, &comrak_options);
 
     println!("Done!");
