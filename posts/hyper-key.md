@@ -51,7 +51,7 @@ Next, open up Karabiner Elements, and allow it to add itself to Login Items so t
 
 Open up `~/.config/karabiner/karabiner.json` with your text editor of choice. Replace the `complex modifications` json with the following:
 
-```python
+```json
 "complex_modifications": {
     "parameters": {
         "basic.simultaneous_threshold_milliseconds": 50,
@@ -113,14 +113,14 @@ Now to make the shortcuts actually do something! First off, open up Hammerspoon'
 Next, open up Hammerspoon's config file, `~/.hammerspoon/init.lua`, in your editor of choice.
 
 Begin the file by defining your constants:
-```python
+```lua
 -- CONSTANTS:
 hyper = {"cmd", "alt", "ctrl", "shift"}
 ```
 
 Next, add live reloading. This'll let hammerspoon automatically update every time it detects a change in it's configuration file:
 
-```python
+```lua
 -- CONFIG RELOADING:
 hs.alert.show("Config Loaded")
 hs.loadSpoon("ReloadConfiguration")
@@ -131,7 +131,7 @@ From here, you can choose to bind keys however you wish. I work with a fairly mi
 
 First, I bind some letter keys to various applications:
 
-```python
+```lua
 -- HYPER APPLICATION BINDINGS:
 application_bindings = {
     ["S"] = "Safari",
@@ -155,7 +155,7 @@ end
 
 I also use hammerspoon for some basic window management, so I can quickly tile the active window to the left, right, or maximize. Those settings look like this:
 
-```python
+```lua
 -- WINDOW MANIPULATION:
 hs.window.animationDuration = 0
 
@@ -197,6 +197,6 @@ end)
 
 From here, you can go on to create whatever shortcuts you wish. Hammerspoon provides some [excellent documentation](https://www.hammerspoon.org/docs/), and you can also take a look at my full hyperkey config in [my dotfiles](https://github.com/arya-k/dotfiles/tree/master/hyperkey). 
 
-The only limit now, is your imagination*!
+The only limit now, is your imagination!*
 
-* and your understanding of lua :)
+*and your understanding of lua :)
