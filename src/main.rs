@@ -80,7 +80,7 @@ fn md_to_html(md: &str, comrak_options: &ComrakOptions) -> std::string::String {
     let ps = SyntaxSet::load_defaults_newlines();
     let ts = ThemeSet::load_defaults();
 
-    // parse code snippets outside of the parser to avoid escaping.
+    // parse code snippets outside of the parser to avoid quotes being html escaped.
     let mut code_snippets: Vec<std::string::String> = Vec::new();
 
     // basic BFS
@@ -93,7 +93,7 @@ fn md_to_html(md: &str, comrak_options: &ComrakOptions) -> std::string::String {
                 let lang = std::str::from_utf8(&codenode.info).unwrap();
                 let syntax = ps.find_syntax_by_token(lang).unwrap();
                 let orig_body = std::mem::replace(
-                    // replace code snippets with {{ CODE: }}
+                    // replace code snippets with {{ CODE:# }}
                     &mut codenode.literal,
                     format!("{{ CODE:{} }}", code_snippets.len())
                         .as_bytes()
@@ -122,7 +122,7 @@ fn md_to_html(md: &str, comrak_options: &ComrakOptions) -> std::string::String {
         .unwrap()
         .to_string()
         .replace("<p><time>", "<time>")
-        .replace("</time></p>", "</time>"); // time gets extra escaped
+        .replace("</time></p>", "</time>"); // avoid time getting extra escaped
 
     // Add the code snippets back in:
     for (i, cs) in code_snippets.iter().enumerate() {
@@ -131,7 +131,7 @@ fn md_to_html(md: &str, comrak_options: &ComrakOptions) -> std::string::String {
             &cs.lines()
                 .skip(1)
                 .map(|l| l.to_owned() + "\n")
-                .collect::<String>()
+                .collect::<String>() // reconnect the strings
                 .replace("</span></pre>", "</span>"),
         );
     }
@@ -145,7 +145,7 @@ fn write_index(post_structs: &mut Vec<Post>, header: &str, comrak_options: &Comr
 
     println!("Generating index"); // this is done inline since it's pretty simple
     let mut index = header.replace("{{ TITLE }}", "arya-k").to_string(); // reuse header
-    index.push_str("<h1 style=\"font-size:3em\">Posts</h1>\n"); // Posts at top of page
+    index.push_str("<h1 style=\"font-size:3em\">Posts</h1>\n"); // say "Posts" at top of page
 
     for post in post_structs {
         // generate posts in order
