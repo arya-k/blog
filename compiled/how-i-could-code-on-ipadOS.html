@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+<header id="header">
+<a class="blogname" href="https://www.arya-k.dev">arya-k</a>
+</header>
+<title>How I could code on ipadOS</title>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<link id='stylesheet' rel='stylesheet' href='assets/style.css'>
+<!-- Icons generated with https://realfavicongenerator.net -->
+<link rel="apple-touch-icon" sizes="180x180" href="assets/imgs/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/imgs/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/imgs/favicon-16x16.png">
+<link rel="manifest" href="assets/imgs/site.webmanifest">
+<link rel="mask-icon" href="assets/imgs/safari-pinned-tab.svg" color="#133259">
+<link rel="shortcut icon" href="assets/imgs/favicon.ico">
+<meta name="msapplication-TileColor" content="#133259">
+<meta name="msapplication-config" content="assets/imgs/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+<h1>How I could code on ipadOS</h1>
+<time>Jul 25, 2019</time>
+<p>With ipadOS coming out in 2019 just as I'm about to enter college, I'm extremely tempted to buy a brand new iPad pro. The battery life, minimal form factor and pencil support are compelling features for a college student.</p>
+<p>But there's one problem:</p>
+<blockquote>
+<p><strong>I like to code.</strong></p>
+</blockquote>
+<p>And unfortunately, programming and iOS have never really gotten along. But times are changing, and I - as usual - am excessively optimistic. As a developer, I need the following:</p>
+<ul>
+<li>Access to a filesystem</li>
+<li>Ability to install packages/libraries</li>
+<li>Ability to run any programming language I want.</li>
+<li>A high quality code editor with keyboard shortcuts.</li>
+</ul>
+<p>With ipadOS and access to a remote server, this dream finally seems within reach. Here's how I'd use <a href="https://github.com/cdr/code-server">code-server</a> and <a href="https://github.com/wireguard/wireguard">wireguard</a> to program on Apple's latest tablet:</p>
+<h3>Lightsail instance</h3>
+<p>First, I need a remote server to run the editor in. These are instructions for AWS <a href="https://lightsail.aws.amazon.com">lightsail</a>.</p>
+<p>Create an instance with Ubuntu 18.04:</p>
+<p><img src="https://i.imgur.com/nsGLazs.png" alt="Creating the lightsail instance" /></p>
+<p>Pick an SSH key as appropriate, then pick the appropriate instance plan and name.</p>
+<p>Next, create a Static IP by going to <code>Networking &gt; Create Static IP</code>, and bind it to your instance:</p>
+<p><img src="https://i.imgur.com/KhU9HRK.png" alt="Binding to the instance" /></p>
+<p>Finally, forward the UDP port <code>54321</code>:</p>
+<p><img src="https://i.imgur.com/d3Ud3t1.png" alt="Forwarding the UDP port" /></p>
+<p>Press the terminal icon to connect to your instance!</p>
+<p><img src="https://i.imgur.com/DGBavBA.png" alt="Pressing the terminal icon" /></p>
+<h3>Updating the instance:</h3>
+<p>Begin by updating the instance with the latest and greatest packages from Ubuntu:</p>
+<pre><code class="language-bash"><span style="color:#65737e;"># escalate privileges
+</span><span style="color:#8fa1b3;">sudo</span><span style="color:#bf616a;"> -s
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#65737e;"># update the OS
+</span><span style="color:#8fa1b3;">sudo</span><span style="color:#c0c5ce;"> apt-get update
+</span><span style="color:#bf616a;">DEBIAN_FRONTEND</span><span style="color:#c0c5ce;">=&#39;</span><span style="color:#a3be8c;">noninteractive</span><span style="color:#c0c5ce;">&#39; </span><span style="color:#8fa1b3;">apt-get</span><span style="color:#bf616a;"> -y -o</span><span style="color:#c0c5ce;"> Dpkg::Options::=&#39;</span><span style="color:#a3be8c;">--force-confdef</span><span style="color:#c0c5ce;">&#39;</span><span style="color:#bf616a;"> -o</span><span style="color:#c0c5ce;"> Dpkg::Options::=&#39;</span><span style="color:#a3be8c;">--force-confold</span><span style="color:#c0c5ce;">&#39; upgrade
+</span><span style="color:#bf616a;">DEBIAN_FRONTEND</span><span style="color:#c0c5ce;">=&#39;</span><span style="color:#a3be8c;">noninteractive</span><span style="color:#c0c5ce;">&#39; </span><span style="color:#8fa1b3;">apt-get</span><span style="color:#bf616a;"> -y -o</span><span style="color:#c0c5ce;"> Dpkg::Options::=&#39;</span><span style="color:#a3be8c;">--force-confdef</span><span style="color:#c0c5ce;">&#39;</span><span style="color:#bf616a;"> -o</span><span style="color:#c0c5ce;"> Dpkg::Options::=&#39;</span><span style="color:#a3be8c;">--force-confold</span><span style="color:#c0c5ce;">&#39; dist-upgrade
+</span>
+</code></pre>
+<h3>Install Wireguard</h3>
+<p>We're going to use the Wireguard VPN for a fast, roaming, low latency connection to the instance.</p>
+<p>First, install the relevant packages:</p>
+<pre><code class="language-bash"><span style="color:#65737e;"># install wireguard
+</span><span style="color:#96b5b4;">echo</span><span style="color:#c0c5ce;"> iptables-persistent iptables-persistent/autosave_v4 boolean false | </span><span style="color:#8fa1b3;">sudo</span><span style="color:#c0c5ce;"> debconf-set-selections
+</span><span style="color:#96b5b4;">echo</span><span style="color:#c0c5ce;"> iptables-persistent iptables-persistent/autosave_v6 boolean false | </span><span style="color:#8fa1b3;">sudo</span><span style="color:#c0c5ce;"> debconf-set-selections
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#8fa1b3;">add-apt-repository</span><span style="color:#c0c5ce;"> ppa:wireguard/wireguard</span><span style="color:#bf616a;"> -y
+</span><span style="color:#8fa1b3;">apt-get</span><span style="color:#c0c5ce;"> update
+</span><span style="color:#8fa1b3;">apt-get</span><span style="color:#c0c5ce;"> install wireguard qrencode</span><span style="color:#bf616a;"> -y
+</span>
+</code></pre>
+<p>Then, generate public and private keys for the client and server:</p>
+<pre><code class="language-bash"><span style="color:#65737e;"># create keys
+</span><span style="color:#8fa1b3;">modprobe</span><span style="color:#c0c5ce;"> wireguard
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#96b5b4;">cd</span><span style="color:#c0c5ce;"> /etc/wireguard
+</span><span style="color:#96b5b4;">umask</span><span style="color:#c0c5ce;"> 077
+</span><span style="color:#8fa1b3;">wg</span><span style="color:#c0c5ce;"> genkey | </span><span style="color:#8fa1b3;">tee</span><span style="color:#c0c5ce;"> server_private.key | </span><span style="color:#8fa1b3;">wg</span><span style="color:#c0c5ce;"> pubkey &gt; server_public.key
+</span><span style="color:#8fa1b3;">wg</span><span style="color:#c0c5ce;"> genkey | </span><span style="color:#8fa1b3;">tee</span><span style="color:#c0c5ce;"> client_private.key | </span><span style="color:#8fa1b3;">wg</span><span style="color:#c0c5ce;"> pubkey &gt; client_public.key
+</span>
+</code></pre>
+<p>Create the server config at <code>/etc/wireguard/wg0.conf</code>:</p>
+<pre><code class="language-bash"><span style="color:#65737e;"># create server config
+</span><span style="color:#96b5b4;">echo </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">[Interface]
+</span><span style="color:#a3be8c;">PrivateKey = server_private_key
+</span><span style="color:#a3be8c;">Address = 10.0.0.1/24
+</span><span style="color:#a3be8c;">ListenPort = 54321
+</span><span style="color:#a3be8c;">
+</span><span style="color:#a3be8c;">[Peer]
+</span><span style="color:#a3be8c;">PublicKey = client_public_key
+</span><span style="color:#a3be8c;">AllowedIPs = 10.0.0.2/24</span><span style="color:#c0c5ce;">&quot; &gt; wg0.conf
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#8fa1b3;">sed</span><span style="color:#bf616a;"> -i </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">s/server_private_key/</span><span style="color:#c0c5ce;">$</span><span style="color:#a3be8c;">(</span><span style="color:#8fa1b3;">sed </span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;">s:/:\\/:g</span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;"> server_private.key)/</span><span style="color:#c0c5ce;">&quot; wg0.conf
+</span><span style="color:#8fa1b3;">sed</span><span style="color:#bf616a;"> -i </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">s/client_public_key/</span><span style="color:#c0c5ce;">$</span><span style="color:#a3be8c;">(</span><span style="color:#8fa1b3;">sed </span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;">s:/:\\/:g</span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;"> client_public.key)/</span><span style="color:#c0c5ce;">&quot; wg0.conf
+</span>
+</code></pre>
+<p>Then, create the client config at <code>/etc/wireguard/client.conf</code>:</p>
+<pre><code class="language-bash"><span style="color:#65737e;"># enable client key
+</span><span style="color:#96b5b4;">echo </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">[Interface]
+</span><span style="color:#a3be8c;">Address = 10.0.0.2/24
+</span><span style="color:#a3be8c;">PrivateKey = client_private_key
+</span><span style="color:#a3be8c;">
+</span><span style="color:#a3be8c;">[Peer]
+</span><span style="color:#a3be8c;">PublicKey = server_public_key
+</span><span style="color:#a3be8c;">Endpoint = server_ip:54321
+</span><span style="color:#a3be8c;">AllowedIPs = 10.0.0.1/32</span><span style="color:#c0c5ce;">&quot; &gt; client.conf
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#8fa1b3;">sed</span><span style="color:#bf616a;"> -i </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">s/client_private_key/</span><span style="color:#c0c5ce;">$</span><span style="color:#a3be8c;">(</span><span style="color:#8fa1b3;">sed </span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;">s:/:\\/:g</span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;"> client_private.key)/</span><span style="color:#c0c5ce;">&quot; client.conf
+</span><span style="color:#8fa1b3;">sed</span><span style="color:#bf616a;"> -i </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">s/server_public_key/</span><span style="color:#c0c5ce;">$</span><span style="color:#a3be8c;">(</span><span style="color:#8fa1b3;">sed </span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;">s:/:\\/:g</span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;"> server_public.key)/</span><span style="color:#c0c5ce;">&quot; client.conf
+</span><span style="color:#8fa1b3;">sed</span><span style="color:#bf616a;"> -i </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">s/server_ip/</span><span style="color:#c0c5ce;">$</span><span style="color:#a3be8c;">(</span><span style="color:#8fa1b3;">curl</span><span style="color:#a3be8c;"> ipecho.net/plain)/</span><span style="color:#c0c5ce;">&quot; client.conf
+</span>
+</code></pre>
+<p>Finally, start the service:</p>
+<pre><code class="language-bash"><span style="color:#65737e;"># start the service
+</span><span style="color:#8fa1b3;">systemctl</span><span style="color:#c0c5ce;"> enable wg-quick@wg0
+</span><span style="color:#8fa1b3;">systemctl</span><span style="color:#c0c5ce;"> start wg-quick@wg0
+</span>
+</code></pre>
+<h3>Wireguard on ipadOS:</h3>
+<p>Now, install the wireguard client on your iPad, and setup the server connection using client.conf.</p>
+<p>To ease the process, you can run the following:</p>
+<pre><code class="language-bash"><span style="color:#8fa1b3;">qrencode</span><span style="color:#bf616a;"> -t</span><span style="color:#c0c5ce;"> ansiutf8 &lt; /etc/wireguard/client.conf
+</span>
+</code></pre>
+<p>Then, just scan the QR code on the iPad to setup the server.</p>
+<h3>Installing code-server</h3>
+<p>Lastly, we have to setup code-server on the server:</p>
+<pre><code class="language-bash"><span style="color:#65737e;"># add code-server
+</span><span style="color:#b48ead;">export </span><span style="color:#bf616a;">VERSION</span><span style="color:#c0c5ce;">=$</span><span style="color:#a3be8c;">(</span><span style="color:#8fa1b3;">curl</span><span style="color:#bf616a;"> --silent </span><span style="color:#c0c5ce;">&quot;</span><span style="color:#a3be8c;">https://api.github.com/repos/cdr/code-server/releases/latest</span><span style="color:#c0c5ce;">&quot; | </span><span style="color:#8fa1b3;">grep </span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;">&quot;tag_name&quot;:</span><span style="color:#c0c5ce;">&#39; | </span><span style="color:#8fa1b3;">sed</span><span style="color:#bf616a;"> -E </span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;">s/.*&quot;([^&quot;]+)&quot;.*/\1/</span><span style="color:#c0c5ce;">&#39;</span><span style="color:#a3be8c;">)
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#8fa1b3;">wget</span><span style="color:#c0c5ce;"> https://github.com/cdr/code-server/releases/download/$</span><span style="color:#bf616a;">VERSION</span><span style="color:#c0c5ce;">/code-server$</span><span style="color:#bf616a;">VERSION</span><span style="color:#c0c5ce;">-linux-x64.tar.gz</span><span style="color:#bf616a;"> -O</span><span style="color:#c0c5ce;"> code-server.tar.gz
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#8fa1b3;">tar</span><span style="color:#bf616a;"> -xvzf</span><span style="color:#c0c5ce;"> code-server.tar.gz
+</span><span style="color:#8fa1b3;">rm</span><span style="color:#c0c5ce;"> code-server.tar.gz
+</span><span style="color:#8fa1b3;">mv</span><span style="color:#c0c5ce;"> code-server*/code-server .
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#8fa1b3;">chmod</span><span style="color:#c0c5ce;"> +x ./code-server
+</span><span style="color:#8fa1b3;">rm</span><span style="color:#bf616a;"> -r</span><span style="color:#c0c5ce;"> ./code-server*-x64
+</span><span style="color:#c0c5ce;">
+</span><span style="color:#8fa1b3;">sudo</span><span style="color:#c0c5ce;"> mv ./code-server /usr/local/bin/
+</span>
+</code></pre>
+<p>Create a systemd service so it automatically runs whenever the server is restarted:</p>
+<pre><code class="language-bash"><span style="color:#8fa1b3;">sudo</span><span style="color:#c0c5ce;"> echo &quot;</span><span style="color:#a3be8c;">[Unit]
+</span><span style="color:#a3be8c;">Description=Code-Server
+</span><span style="color:#a3be8c;">After=network.target
+</span><span style="color:#a3be8c;">
+</span><span style="color:#a3be8c;">[Service]
+</span><span style="color:#a3be8c;">Type=simple
+</span><span style="color:#a3be8c;">User=ubuntu
+</span><span style="color:#a3be8c;">ExecStart=/usr/local/bin/code-server --allow-http --no-auth /home/ubuntu/code
+</span><span style="color:#a3be8c;">
+</span><span style="color:#a3be8c;">[Install]
+</span><span style="color:#a3be8c;">WantedBy=multi-user.target</span><span style="color:#c0c5ce;">&quot; &gt; /etc/systemd/system/code-server.service
+</span><span style="color:#8fa1b3;">sudo</span><span style="color:#c0c5ce;"> systemctl enable code-server.service</span><span style="color:#bf616a;"> --now
+</span>
+</code></pre>
+<h3>Usage</h3>
+<p>You're all set! Whenever you want to program on the iPad, connect wireguard to your VPN, and then just open up a browser and navigate to <code>http://10.0.0.1:8443</code></p>
+<p><img src="https://i.imgur.com/OL1iN01.mp4" alt="Coding on an iPad Pro" /></p>
+<p><em>Video from <a href="https://medium.com/@ow/its-finally-possible-to-code-web-apps-on-an-ipad-pro-90ad9c1fb59a">this</a> medium article</em></p>
+</body>
+</html>
