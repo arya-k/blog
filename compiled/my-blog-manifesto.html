@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+<header id="header">
+<a class="blogname" href="https://www.arya-k.dev">arya-k</a>
+</header>
+<title>My Blog Manifesto.</title>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<link id='stylesheet' rel='stylesheet' href='assets/style.css'>
+<!-- Icons generated with https://realfavicongenerator.net -->
+<link rel="apple-touch-icon" sizes="180x180" href="assets/imgs/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/imgs/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/imgs/favicon-16x16.png">
+<link rel="manifest" href="assets/imgs/site.webmanifest">
+<link rel="mask-icon" href="assets/imgs/safari-pinned-tab.svg" color="#133259">
+<link rel="shortcut icon" href="assets/imgs/favicon.ico">
+<meta name="msapplication-TileColor" content="#133259">
+<meta name="msapplication-config" content="assets/imgs/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+<h1>My Blog Manifesto.</h1>
+<time>Aug 7, 2019</time>
+<p>I'm frustrated with the web as it stands today. Instead of delivering content, it seems instead that every site you visit tries to make you the product. Invasive advertising fingerprints my every move. Autoplaying videos load when all I want to do is <em>read the darn article</em>, and popups, redirects and suffocatingly large persistent headers and footers make it impossible to get to the content.</p>
+<p>Well, I'm tired of it. And, as <a href="https://sheep.horse/2016/6/a_website_manifesto_-_introducing_sheep.horse.html">others have done</a>, I'm going to take a stand, small though it may be. I'm going to do my best to show that a website can serve it's purpose, without the bloat, the kruft, or the distractions.</p>
+<p>I wanted to prove that web technologies could do better. And, somewhat counterintuitively, I think that I can do it best by throwing most of those technologies away.</p>
+<p>Don't believe me?</p>
+<p>Here's a manifesto to prove it.</p>
+<hr />
+<h4>My manifesto, a list of qualities I believe any good website should have.</h4>
+<ul>
+<li>It should load fast.</li>
+<li>If it's about the content, then it should place the content front and center.</li>
+<li>Colors should be easy on the eyes</li>
+<li>Consistent color themeing</li>
+<li>No external javascript. You alone should control your user experience, not a larger corporation with different priorities.</li>
+<li>No references to third party resources, whenever possible. Social media buttons, comment sections- forget 'em.</li>
+<li>Pages should look good on any device.</li>
+<li>No sticky headers, autoplaying videos, etc.</li>
+<li>The source code should be readable- you shouldn't even need to minify your HTML.</li>
+<li><strong>Always HTTPS.</strong> It's 2019, you're serving static pages. There's no excuse for HTTP.</li>
+<li>It should load super fast. It's a blog, not a 4K movie.</li>
+<li>No gimmicky animations. Leave them for the middle school powerpoints.</li>
+<li>No cookies or tracking tokens. Be GDPR compliant, <em>without</em> the cookie banner.</li>
+</ul>
+<p>I do my best to embody these goals with this blog. Everything is a static HTML page, that's currently hosted on <a href="https://www.netlify.com">Netlify's free tier</a>, but that can just as easily be moved to any other platform. On the other end, there's a bunch of markdown files, and a Rust script I built to autogenerate the HTML.</p>
+<p>I use Rust because it's fast, and I wanted the chance to evaluate it's package ecosystem as a whole. It even does syntax highlighting for code in pure HTML, so I don't need third party JS libraries to render my code.</p>
+<p>For look and feel, the website is built more or less from scratch, but I heavily referenced <a href="https://watercss.netlify.com/">Water.css</a> and <a href="https://jrl.ninja/etc/1/">58 bytes of css to look great nearly everywhere</a>. I also used <a href="https://coolors.co">coolors</a> for creating my color palatte.</p>
+<p>I'm going to do my best to avoid editing the theme of the blog from now on. I'm always impressed by the timelessness of blogs like <a href="https://daringfireball.net/">The Daring Fireball</a>, so I will do my best to emulate it.</p>
+<p>Source code for the static site generator and the blog as a whole is available at my github <a href="https://github.com/arya-k/blog/">here</a>.</p>
+</body>
+</html>
