@@ -1,4 +1,4 @@
-# My Blog Manifesto.
+# My blog manifesto.
 <time>Aug 7, 2019</time>
 
 I'm frustrated with the web as it stands today. Instead of delivering content, it seems instead that every site you visit tries to make you the product. Invasive advertising fingerprints my every move. Autoplaying videos load when all I want to do is _read the darn article_, and popups, redirects and suffocatingly large persistent headers and footers make it impossible to get to the content.
