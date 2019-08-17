@@ -8,7 +8,6 @@ use syntect::highlighting::ThemeSet;
 use syntect::html::highlighted_html_for_string;
 use syntect::parsing::SyntaxSet;
 
-static REPO_ROOT: &'static str = ".";
 static BASE_URL: &'static str = "https://www.arya-k.dev";
 
 #[derive(Debug)]
@@ -21,7 +20,7 @@ struct Post {
 
 fn remove_compiled_assets() {
     println!("Removing compiled assets...");
-    let dir = fs::read_dir(format!("{}/compiled", REPO_ROOT)).unwrap();
+    let dir = fs::read_dir("./compiled").unwrap();
     for entry in dir {
         if let Ok(entry) = entry {
             let path = entry.path();
@@ -160,12 +159,10 @@ fn write_index(post_structs: &mut Vec<Post>, header: &str, comrak_options: &Comr
     }
 
     index.push_str(
-        &fs::read_to_string(format!("{}/compiled/assets/index_footer.html", REPO_ROOT))
-            .expect("Unable to read footer"),
+        &fs::read_to_string("./compiled/assets/index_footer.html").expect("Unable to read footer"),
     ); // this part is a custom footer
 
-    fs::write(format!("{}/compiled/index.html", REPO_ROOT), index)
-        .expect("Unable to write index file");
+    fs::write("./compiled/index.html", index).expect("Unable to write index file");
 }
 
 fn main() {
@@ -173,7 +170,7 @@ fn main() {
     remove_compiled_assets();
 
     // Gather the head and tail strings:
-    let header = fs::read_to_string(format!("{}/compiled/assets/head.html", REPO_ROOT))
+    let header = fs::read_to_string("./compiled/assets/head.html")
         .expect("Unable to read header")
         .replace("{{ BASE_URL }}", BASE_URL);
     let footer = "</body>\n</html>";
@@ -192,7 +189,7 @@ fn main() {
     // Start parsing through all the posts:
     let mut post_structs: Vec<Post> = Vec::new();
 
-    let posts = fs::read_dir(format!("{}/posts", REPO_ROOT)).unwrap();
+    let posts = fs::read_dir("./posts").unwrap();
     for post in posts {
         // gather info about file
         let safe_post = post.unwrap();
@@ -213,8 +210,7 @@ fn main() {
             );
 
             // write to file
-            fs::write(format!("{}/compiled/{}", REPO_ROOT, goal_name), html)
-                .expect("Unable to write file");
+            fs::write(format!("./compiled/{}", goal_name), html).expect("Unable to write file");
 
             // add to all posts
             post_structs.push(p);
