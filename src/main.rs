@@ -8,7 +8,7 @@ use syntect::highlighting::ThemeSet;
 use syntect::html::highlighted_html_for_string;
 use syntect::parsing::SyntaxSet;
 
-static REPO_ROOT: &'static str = "/Users/arya/Documents/blog";
+static REPO_ROOT: &'static str = ".";
 static BASE_URL: &'static str = "https://www.arya-k.dev";
 
 #[derive(Debug)]
