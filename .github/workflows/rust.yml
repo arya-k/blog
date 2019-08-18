@@ -10,6 +10,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Build
-      run: cargo build --verbose
+      run: cargo run
     - name: Run
-      run: cargo run --verbose
+      run: cargo run
+    - name: Update
+      run: bash ./src/builder.sh
