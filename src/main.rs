@@ -8,7 +8,7 @@ use syntect::highlighting::ThemeSet;
 use syntect::html::highlighted_html_for_string;
 use syntect::parsing::SyntaxSet;
 
-static BASE_URL: &'static str = "https://www.arya-k.dev";
+static BASE_URL: &'static str = "https://blog.arya-k.dev";
 
 #[derive(Debug)]
 struct Post {
