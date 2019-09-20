@@ -193,7 +193,7 @@ fn main() {
     for post in posts {
         // gather info about file
         let safe_post = post.unwrap();
-        let goal_path = safe_post.path().with_extension("html");
+        let goal_path = safe_post.path().with_extension("");
         let goal_name = goal_path.file_name().unwrap().to_str().unwrap();
         println!("Compiling {:?}", safe_post.file_name());
 
@@ -210,7 +210,8 @@ fn main() {
             );
 
             // write to file
-            fs::write(format!("./compiled/{}", goal_name), html).expect("Unable to write file");
+            fs::write(format!("./compiled/{}.html", goal_name), html)
+                .expect("Unable to write file");
 
             // add to all posts
             post_structs.push(p);
