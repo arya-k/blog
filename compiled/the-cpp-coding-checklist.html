@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+<header id="header">
+<a class="blogname" href="https://blog.arya-k.dev">arya-k</a>
+</header>
+<title>The C++ Coding Checklist</title>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<link id='stylesheet' rel='stylesheet' href='assets/style.css'>
+<!-- Icons generated with https://realfavicongenerator.net -->
+<link rel="apple-touch-icon" sizes="180x180" href="assets/imgs/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/imgs/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/imgs/favicon-16x16.png">
+<link rel="manifest" href="assets/imgs/site.webmanifest">
+<link rel="mask-icon" href="assets/imgs/safari-pinned-tab.svg" color="#133259">
+<link rel="shortcut icon" href="assets/imgs/favicon.ico">
+<meta name="msapplication-TileColor" content="#133259">
+<meta name="msapplication-config" content="assets/imgs/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+<h1>The C++ Coding Checklist</h1>
+<time>Dec 23, 2019</time>
+<p>With an algorithms and data structure course in C++ imminent, it seemed like the right time to develop a gut instinct for clean, maintainable C++ code. To that end, I've gathered some resources on C++ programming:</p>
+<ul>
+<li><a href="http://www.umich.edu/~eecs381/handouts/C++_Coding_Standards.pdf">(PDF)</a> UofM EECS 381 Coding Standards</li>
+<li><a href="https://people.cs.clemson.edu/~dhouse/courses/405/papers/optimize.pdf">(PDF)</a> Tips for Optimizing C/C++ Code</li>
+<li><a href="https://github.com/lefticus/cppbestpractices">(Github)</a> C++ Best Practices</li>
+</ul>
+<hr />
+<p>As I complete each project in EECS 281 (Data Structures and Algorithms), I'll work through this checklist:</p>
+<ul>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Single Point of Maintainance</strong> Unique code only appears for unique features, program constants are names as <code>const variables</code>, functions are used instead of duplicated code</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>No Unsigned Integers</strong> only <code>size_t</code> is used, and often cast to an <code>int</code>.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Double v. Float</strong> double used instead of float; equality is NEVER used.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Clear Class and Var names</strong>  Upper case name for my own types; no <code>victims</code>. <code>using</code> used when appropriate. <code>_c</code> for constants, <code>_t</code> for typedefs. Clear variable names, without implementation details</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Class Structure</strong> Not mixing <em>plain old data</em> and <em>modifying classes</em> (eg. Circle is POD, Geometry class manipulates it).</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>String Literal Constants</strong> string constants are defined as <code>const char * const</code></p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Using nullptr</strong> Use <code>nullptr</code>, and <code>if (!ptr)</code>.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>std::string</strong> Use <code>+=</code> whenever possible. Use standard overloaded operators, not <code>strcmp</code>.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>pre-increments</strong> Use pre-increments in for loops with iterators: <code> for(list&lt;Thing&gt;::iterator it = things.begin(); it != things.end(); ++it)</code></p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Catching exceptions</strong> Avoid catching <code>std::exception</code> as a blanket error. Always catch errors by reference: <code>catch (Error&amp; x)</code>.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Using functions</strong> Freely use functions, with clear names. Inline small functions for performance. Avoid swiss-army functions or flags.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Passing parameters</strong> If you don't want modification, pass built-in-types by copy, and other types by reference to const, or const pointers.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Scopes of variables</strong> Declare variables in the narrowest scope where it is used. Declare simple types inside loops, and complex types outside those loops.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Loops, If/Else and Switch</strong> Use flat if/elses, or switches when possible. Minimize function calls in loops to allow compiler optimizations: <code>for(size_t i=0, len=list.size(); i &lt; len; i++)</code></p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>File IO</strong> Format should be <code>while(infile &gt;&gt; x) { /* do stuff */ }; if(!infile.eof()) { /* error handling */ }</code></p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Error Handling</strong> Explicitly design for errors. Elegantly handle user error, and use <code>assert</code> for programmer errors. No Exceptions for normal control flow.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Class Design</strong> Base class functionality should be used by <em>all</em> derived classes. Do not share data in static member variables. Declare public, protected, then private. All member vars should be private, and const functions should be used.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Constructors</strong> Single argument constructs should use a default parameter for the default constructor, and constructors should be marked as explicit unless class is POD: <code>explicit Thing(int i_= 0) : i(i_) {}</code>.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Ahmadal's Law &amp; Premature optimizations</strong> make the common case fast, and the rare case correct. Code for correctness before optimizing.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Jumps and Branches</strong> Use function calls sparingly, prefer iteration over recursion, move loops inside function calls.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Arrays, local vars and function parameters</strong> Order array indices in order whenever possible to aid the CPU. Avoid local variables and function parameters so that they can be stored in registers.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Default constructors and class operations</strong> Make default constructors cheap when possible, especially for classes manipulated frequently. Use <code>+=</code> instead of <code>+</code> for classes, and the opposite for primitive data types.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Equations and early terminations</strong> Simplify all equations on paper beore implementing them in code. Keep the most common cases in the first if statement, or make loops terminate faster in those cases.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Extra GCC flags</strong> Consider using <code>-Wall -Wextra -Wshadow -Wnon-virtual-dtor -Wold-style-cast -Wunused -Woverloaded-virtual -Wpedantic -Wmisleading-indentation -Wduplicated-cond -Wduplicated-branches -Wnull-dereference -Werror</code></p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Default initializing</strong> Default initialize variables with braces: <code>int m_value{ 0 };</code></p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>Avoiding []</strong> Consider [] as an indication that an algorithm was not used where it could have been</p>
+</li>
+</ul>
+<p>I hope to slowly check items off this list as they are internalized- as a personal goal by the end of the course I would like to do all of these things before I even go through the list. At that point, I will have internalized best practices!</p>
+</body>
+</html>
