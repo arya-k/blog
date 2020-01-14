@@ -33,6 +33,12 @@
 <p>As I complete each project in EECS 281 (Data Structures and Algorithms), I'll work through this checklist:</p>
 <ul>
 <li>
+<p><input type="checkbox" disabled="" /> <strong>Initialized Vectors</strong> When size is known, allocate vector size with <code>resize(n)</code> or <code>reserve(n)</code>.</p>
+</li>
+<li>
+<p><input type="checkbox" disabled="" /> <strong>No Synchronized IO</strong> Since we know we won't be using C-style IO, disable syncing with <code>std::ios_base::sync_with_stdio(false);</code>.</p>
+</li>
+<li>
 <p><input type="checkbox" disabled="" /> <strong>Single Point of Maintainance</strong> Unique code only appears for unique features, program constants are names as <code>const variables</code>, functions are used instead of duplicated code</p>
 </li>
 <li>
