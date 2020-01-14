@@ -13,6 +13,7 @@ As I complete each project in EECS 281 (Data Structures and Algorithms), I'll wo
 
 - [ ] __Initialized Vectors__ When size is known, allocate vector size with `resize(n)` or `reserve(n)`.
 - [ ] __No Synchronized IO__ Since we know we won't be using C-style IO, disable syncing with `std::ios_base::sync_with_stdio(false);`.
+- [ ] __Buffered Output__ If outputting a lot of data, end with `"\n"` instead of `std::endl` to avoid flushing the buffer at the end of every line.
 - [ ] __Single Point of Maintainance__ Unique code only appears for unique features, program constants are names as `const variables`, functions are used instead of duplicated code
 - [ ] __No Unsigned Integers__ only `size_t` is used, and often cast to an `int`.
 - [ ] __Double v. Float__ double used instead of float; equality is NEVER used.

@@ -39,6 +39,9 @@
 <p><input type="checkbox" disabled="" /> <strong>No Synchronized IO</strong> Since we know we won't be using C-style IO, disable syncing with <code>std::ios_base::sync_with_stdio(false);</code>.</p>
 </li>
 <li>
+<p><input type="checkbox" disabled="" /> <strong>Buffered Output</strong> If outputting a lot of data, end with <code>&quot;\n&quot;</code> instead of <code>std::endl</code> to avoid flushing the buffer at the end of every line.</p>
+</li>
+<li>
 <p><input type="checkbox" disabled="" /> <strong>Single Point of Maintainance</strong> Unique code only appears for unique features, program constants are names as <code>const variables</code>, functions are used instead of duplicated code</p>
 </li>
 <li>
