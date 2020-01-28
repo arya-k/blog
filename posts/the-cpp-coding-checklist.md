@@ -6,6 +6,7 @@ With an algorithms and data structure course in C++ imminent, it seemed like the
 * [(PDF)](http://www.umich.edu/~eecs381/handouts/C++_Coding_Standards.pdf) UofM EECS 381 Coding Standards
 * [(PDF)](https://people.cs.clemson.edu/~dhouse/courses/405/papers/optimize.pdf) Tips for Optimizing C/C++ Code
 * [(Github)](https://github.com/lefticus/cppbestpractices) C++ Best Practices
+* [(PDF)](http://www.josuttis.com/libbook/algolist.pdf) List of STL algorithms
 
 ---
 
